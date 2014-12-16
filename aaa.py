@@ -27,7 +27,7 @@ class simpleapp_tk(Tkinter.Tk):
 
         self.infoVariable = Tkinter.StringVar()
         self.labelInfo = Tkinter.Label(self, textvariable=self.infoVariable, font="Angsana")
-        self.labelInfo.place(x=330, y=30)
+        self.labelInfo.place(x=300, y=30)
         self.infoVariable.set('')
 
         self.scoreVariable = Tkinter.StringVar()
@@ -50,7 +50,7 @@ class simpleapp_tk(Tkinter.Tk):
         self.entry = Tkinter.Entry(self, textvariable=self.entryVariable, fg="black", bg="white", width = 48, font="Angsana")
         self.entry.place(x=140, y=70)
         self.entryVariable.set(u"")
-        self.entry.bind('<Key>', self.on_key) # event
+        self.entry.bind('<Key>', self.on_key)
 
 
         self.q = Tkinter.Button(self, text='q', height=2, width=6)
@@ -330,19 +330,14 @@ class simpleapp_tk(Tkinter.Tk):
             self.infoVariable2.set(u"Please select level !")
         else:
             if not self.started:
-                # reset values
                 self.started = True
                 self.score = 0
                 self.time = 5.0
                 self.button_color_default(self)
-            
-            # select first letter
                 self.randletter = random.choice('aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYz')
                 self.button_color_red(self)
-            # show first letter and score
-            self.infoVariable.set('     '+self.randletter)
+            self.infoVariable.set('         '+self.randletter)
             self.infoVariable2.set('')
-            # start timer
             self.after(100, self.timer)
 
     def on_key(self, event):
@@ -354,7 +349,7 @@ class simpleapp_tk(Tkinter.Tk):
                 print 'Correct', event.char
                 self.score += 10
                 self.randletter = random.choice('aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYz')
-                self.infoVariable.set('     '+self.randletter)
+                self.infoVariable.set('         '+self.randletter)
                 self.scoreVariable.set('Score : ' + str(self.score))
                 self.button_color_red(self)
 
@@ -368,7 +363,7 @@ class simpleapp_tk(Tkinter.Tk):
                     self.score -= 5
                 print 'Incorrect', event.char
                 self.randletter = random.choice('aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYz')
-                self.infoVariable.set('     '+self.randletter)
+                self.infoVariable.set('         '+self.randletter)
                 self.scoreVariable.set('Score : ' + str(self.score))
                 self.button_color_red(self)
 
@@ -385,7 +380,7 @@ class simpleapp_tk(Tkinter.Tk):
         for line in score:
             scoreboard += line
         self.scoreLabel.config(text=scoreboard)
-        self.scoreLabel.place(x=100, y=10)
+        self.scoreLabel.place(x=95, y=10)
         self.resetButton.place(x=130, y=250)
         self.score.resizable(False,False)
         score.close()
@@ -400,18 +395,42 @@ class simpleapp_tk(Tkinter.Tk):
             scoreboard += line
         self.scoreLabel.config(text=scoreboard)
 
-        
+    def name(self):
+        self.user = Tkinter.Toplevel()
+        self.user.focus()
+        self.user.title('Enter name')
+        self.user.geometry('300x150')
+        self.userInfo = Tkinter.Label(self.user, text='Enter your name :')
+        self.userInfo.place(x=25, y=65)
+        self.scoreLabel = Tkinter.Label(self.user, text='Your score : ' + str(self.score), font="Angsana")
+        self.scoreLabel.place(x=105, y=30)
+        self.enterName = Tkinter.Entry(self.user)
+        self.enterName.place(x=135, y=65)
+        self.enterName.focus()
+        self.enterButton = Tkinter.Button(self.user, text='Enter', width=8, command=self.entername)
+        self.enterButton.place(x=120, y=100)
+
+    def entername(self):
+        self.addscore()
+        self.scoreboard()
+        self.user.destroy()
+
+    def addscore(self):
+        fout = open('Scoreboard.txt', 'a')
+        word = self.enterName.get()+' : ' + str(self.score)
+        fout.write('     ' + word + '\n')
+        fout.close()
+
     def timer(self):
         if self.started:
             if self.timeVariable.get() == "Time : 0.1":
+                self.button_color_default(self)
                 self.started = False
                 self.entryVariable.set('')
-                self.infoVariable.set('Score : ' + str(self.score))
+                self.infoVariable.set('   Click restart !')
                 self.buttonStart.config(text=u'Restart')
-                fout = open('Scoreboard.txt', 'a')
-                word = str(self.score)
-                fout.write('            ' + word + '\n')
-                fout.close()
+                self.name()
+                
             self.entry.focus()
             self.time -= .1
             self.timeVariable.set('Time : ' + str(round(self.time,1)) )
