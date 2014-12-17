@@ -18,7 +18,7 @@ class simpleapp_tk(Tk):
         self.level.place(x=580, y=110)
 
         self.levelInfo = Label(self, text="")
-        self.levelInfo.place(x=290, y=355)
+        self.levelInfo.place(x=150, y=355)
 
         self.infoVariable2 = StringVar()
         self.labelInfo2 = Label(self, textvariable=self.infoVariable2, font="Angsana")
@@ -131,9 +131,9 @@ class simpleapp_tk(Tk):
 
     def level(self, root):
         if self.levelVariable.get() == "Normal":    
-            self.levelInfo.config(text="This is Normal mode")
+            self.levelInfo.config(text="normal - right 1 alphabet score +10 point end when time out!")
         elif self.levelVariable.get() == "Hardcore":
-            self.levelInfo.config(text="This is Hardcore mode")
+            self.levelInfo.config(text="hard core - right 1 alphabet +10 point if type wrong 1 alphabet -5 point")
 
     def button_color_red(self):
         if self.randletter == 'Q':
